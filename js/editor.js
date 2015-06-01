@@ -5,7 +5,7 @@ jQuery( document ).ready(function( $ ) {
     })
     CodeMirrorEditor = CodeMirror.fromTextArea($("#editor")[0], {
         mode: {
-            name: "text/x-cython",
+            name: "text/x-python",
             version: 2,
             singleLineStringErrors: false
         },
