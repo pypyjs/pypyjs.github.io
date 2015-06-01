@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>PyPy.js - console</title>
+  <title>PyPy.js - editor</title>
 
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
@@ -16,6 +16,8 @@
   <link href='css/ansi.css' rel='stylesheet' type='text/css'>
   <link href='css/console.css' rel='stylesheet' type='text/css'>
   <link href='css/pypyjs.css' rel='stylesheet' type='text/css'>
+  <link href='css/codemirror.css' rel='stylesheet' type='text/css'>
+  <link href='css/editor.css' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
@@ -32,8 +34,8 @@
       </div>
       <div class="collapse navbar-collapse bs-navbar-collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="index.html">Overview</a></li>
-          <li><a href="editor.html">Editor</a></li>
+          <li><a href="index.html">Overview</a></li>
+          <li class="active"><a href="editor.html">Editor</a></li>
           <li><a href="https://github.com/pypyjs/pypyjs/releases/">Download</a></li>
           <li><a href="https://github.com/pypyjs/pypyjs">Source</a></li>
           <li><a href="http://github.com/pypyjs/pypyjs/issues">Bugs</a></li>
@@ -43,59 +45,47 @@
     </div>
   </div>
 
-  <div class='container'>
+<div class='container'>
+    <div class="row">
+        <textarea id="editor">print "Hello PyPy-JS!"
+print
 
-    <p>PyPy.js is an experiment in building a fast and compliant python environment for the web.</p>
+for i in range(50):
+    print i,
 
-    <p>It uses the <a href="http://pypy.org/">PyPy</a> python interpreter, compiled for the web via <a href="http://emscripten.org">emscripten</a>, with a custom JIT backend that emits <a href="http://asmjs.org">asm.js</a> code at runtime.</p>
+print "\n"
 
-    <p>Try it out below, or see the links above for benchmarks and download information.</p>
-
-    <p>&nbsp;</p>
-
+import sys
+print "sys.version:", sys.version
+print "sys.platform:", sys.platform
+        </textarea>
+    </div>
+    <div class="row">
+        <h3 id="loading">loading...</h3>
+        <form id="actions" class="form-inline" action="">
+            <div class="form-group">
+                <button id="run" class="btn btn-default">run</button>
+                <label id="run_info"></label>
+            </div>
+            <div class="checkbox float_right">
+                <label><input type="checkbox" id="wrap_output" /> warp output</label>
+            </div>
+        </form>
+    </div>
     <noscript><h3>Please enable JavaScript for using PyPy.js</h3></noscript>
-    <div id="console"></div>
+    <div id="console" class="row"></div>
 
-    <p>&nbsp;</p>
-
-  </div>
-
+</div>
   <script src="pypyjs-release/lib/Promise.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="pypyjs-release/lib/FunctionPromise.js" type="text/javascript" charset="utf-8"></script>
   <script src="pypyjs-release/lib/pypy.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/jquery-migrate-1.2.1.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/jqconsole.min.js" type="text/javascript" charset="utf-8"></script>
-  <script>
-    $(function () {
-      // Global vars, for easy debugging in console.
-      window.jqconsole = $('#console').jqconsole('', '>>> ');
-      window.vm = new PyPyJS();
-      // Send all VM output to the console.
-      vm.stdout = vm.stderr = function(data) {
-        jqconsole.Write(data, 'jqconsole-output');
-      }
-      // Display a helpful message and twiddle thumbs as it loads.
-      vm.stdout('Loading PyPy.js.\n')
-      vm.stdout('It\'s big, so this might take a while...\n\n')
-      vm.ready.then(function() {
-        jqconsole.Reset();
-        vm.stdout('Welcome to PyPy.js!\n')
-        // REPL forever via jqconsole prompt.
-        return vm.repl(function(ps1) {
-          jqconsole.SetPromptLabel(ps1);
-          return new Promise(function(resolve, reject) {
-            jqconsole.Prompt(true, function (input) {
-              resolve(input);
-            });
-          });
-        });
-      }).then(null, function(err) {
-        //jqconsole.Reset();
-        jqconsole.Write('ERROR: ' + err);
-      });
-    });
-  </script>
+  <script src="js/codemirror.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/python.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/editor.js"></script>
   <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js'></script>
 </body>
 
