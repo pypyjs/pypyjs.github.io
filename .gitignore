@@ -1,8 +1,8 @@
-*.pyc
-*.pyo
+*.py[cod]
 *~
 *.swp
 build
 .DS_Store
-lib/modules/
-lib/pypy.vm.*
+
+# PyCharm:
+.idea
