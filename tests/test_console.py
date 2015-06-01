@@ -56,7 +56,7 @@ class PyPyJSSeleniumTests(BaseSeleniumTestCase):
         cls.driver.get(cls.index_url)
 
         print("\nWait for init 'PyPy.js console'...", file=sys.stderr)
-        assert "PyPy.js - console" == cls.driver.title
+        assert "PyPy.js" == cls.driver.title
 
         check = WebDriverWait(cls.driver, 10).until(
             expected_conditions.text_to_be_present_in_element(
