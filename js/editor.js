@@ -29,9 +29,8 @@ jQuery( document ).ready(function( $ ) {
     });
 });
 
-function verbose_exec(code, verbose=true) {
+function verbose_exec(code, run_info) {
     $("#run_info").text("start vm...");
-    jqconsole.Reset();
 
     var init_start = new Date();
     window.vm = new PyPyJS();
@@ -40,20 +39,24 @@ function verbose_exec(code, verbose=true) {
     vm.stdout = vm.stderr = function(data) {
         jqconsole.Write(data, 'jqconsole-output');
     }
+    var pseudo_status = setInterval(function(){ vm.stdout("."); }, 500);
     vm.ready.then(function() {
         var duration = new Date() - init_start;
         $("#run_info").text("PyPy.js init in " + human_time(duration));
 
+        clearInterval(pseudo_status);
+        jqconsole.Reset();
+
         // console.log("Start code:" + JSON.stringify(code));
         var start_time = new Date();
         vm.exec(code).then(function() {
-            if (verbose) {
+            if (run_info) {
                 var duration = new Date() - start_time;
                 $("#run_info").text("Run in " + human_time(duration) + " (OK)");
             }
         }, function (err) {
             // err is an instance of PyPyJS.Error
-            if (verbose) {
+            if (run_info) {
                 var duration = new Date() - start_time;
                 $("#run_info").text("Run in " + human_time(duration) + " ("+err.name+": "+err.message+"!)");
             }
@@ -75,18 +78,20 @@ $(function () {
     window.jqconsole = $('#console').jqconsole('', '>>> ');
 
     $("#run").click(function() {
+        jqconsole.Reset();
+        jqconsole.Write('exec...', 'jqconsole-output');
         var code=CodeMirrorEditor.getValue();
-        verbose_exec(code);
+        verbose_exec(code, run_info=true);
     });
 
     // Display a helpful message and twiddle thumbs as it loads.
-    jqconsole.Write('Loading PyPy.js.\n', 'jqconsole-output');
-    jqconsole.Write('It\'s big, so this might take a while...\n\n', 'jqconsole-output');
+    jqconsole.Write('Loading PyPy.js.\n\n', 'jqconsole-output');
+    jqconsole.Write('It\'s big, so this might take a while...', 'jqconsole-output');
 
     verbose_exec(
         'print "Welcome to PyPy.js!\\n";import sys;print "Python v"+sys.version',
-        verbose=false
-    )
+        run_info=false
+    );
 
     $("#loading").slideUp();
     $("#actions").slideDown("slow");
