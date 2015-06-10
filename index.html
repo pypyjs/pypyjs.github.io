@@ -76,9 +76,11 @@
         jqconsole.Write(data, 'jqconsole-output');
       }
       // Display a helpful message and twiddle thumbs as it loads.
-      vm.stdout('Loading PyPy.js.\n')
-      vm.stdout('It\'s big, so this might take a while...\n\n')
+      vm.stdout("Loading PyPy.js.\n\n");
+      vm.stdout('It\'s big, so this might take a while...');
+      var pseudo_status = setInterval(function(){ vm.stdout("."); }, 500);
       vm.ready.then(function() {
+        clearInterval(pseudo_status);
         jqconsole.Reset();
         vm.stdout('Welcome to PyPy.js!\n')
         // REPL forever via jqconsole prompt.
