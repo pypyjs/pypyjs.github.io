@@ -1,0 +1,81 @@
+<head>
+    <title>PyPy.js - LZMA test</title>
+    <style>
+    pre {
+        border: 5px solid #ddd;
+        width: 90%;
+        height: 80%;
+        margin: 1em;
+        padding: 1em;
+    }
+    </style>
+</head>
+<body>
+<h1>LZMA-JS no Web Workers</h1>
+<p>This simple demonstration shows how to use <a href="http://github.com/nmrugg/LZMA-JS/">LZMA-JS</a> with Ajax.</p>
+<p>Press "<code>Load</code>" to download a compressed file via Ajax and display it below.</p>
+<button id="go">Load</button>
+<pre id="output"></pre>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');" ></script>
+<script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');" ></script>
+<script src="js/utils.js"></script>
+<!--<script src="js/lzma/lzma-d.js" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');" ></script>-->
+<script src="js/lzma/lzma-d-min.js" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');" ></script>
+<script>
+$(document).ready(function() {
+    var out = $("#output");
+    function print(data) {
+        out.append(data+"\n");
+    }
+
+    // https://github.com/henrya/js-jquery/tree/master/BinaryTransport
+    // stored in "js/utils.js"
+    binarytransport()
+
+    function decompress(url, uint8) {
+        print("decompress '"+url+"'...");
+        var start = new Date();
+
+        LZMA.decompress(uint8,
+            on_finish=function(result) {
+                var duration = new Date() - start;
+                print("\nFile '"+url+"' decompressed in " + human_time(duration));
+                print("First decompressed output:");
+                print(result.slice(0,80)+"...");
+            },
+            on_progress=function(percent) {
+                print("Decompressing: " + (percent * 100) + "%");
+            }
+        );
+    }
+
+    function get_lzma_file(url) {
+        print("request file '"+url+"'");
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "binary",
+            responseType: "arraybuffer",
+            processData: false,
+            success: function(result) {
+                print("\nRequest done, result type: " + Object.prototype.toString.call(result));
+
+                /// LZMA-JS can read Uint8Array directly.
+                var uint8 = new Uint8Array(result);
+                print( "uint8 length: " + uint8.length );
+
+                decompress(url, uint8);
+            }
+        });
+    }
+
+    $("#go").on( "click", function() {
+        get_lzma_file("pypy.vm.js_preset3.lzma");
+        get_lzma_file("pypy.vm.js.mem_preset3.lzma");
+    });
+
+    print("Please click on 'Load' !");
+});
+</script>
+</body>
+</html>
