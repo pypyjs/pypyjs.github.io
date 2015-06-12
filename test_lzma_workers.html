@@ -32,13 +32,16 @@ $(document).ready(function() {
     // stored in "js/utils.js"
     binarytransport()
 
+    var start_times = {};
+
     function decompress(url, uint8) {
         print("decompress '"+url+"'...");
-        var start = new Date();
+
+        start_times[url] = new Date();
 
         LZMA.decompress(uint8,
             on_finish=function(result) {
-                var duration = new Date() - start;
+                var duration = new Date() - start_times[url];
                 print("\nFile '"+url+"' decompressed in " + human_time(duration));
                 print("First decompressed output:");
                 print(result.slice(0,80)+"...");

@@ -35,13 +35,16 @@ $(document).ready(function() {
     <!--var my_lzma = new LZMA("js/lzma/lzma_worker.js");-->
     var my_lzma = new LZMA("js/lzma/lzma_worker-min.js");
 
+    var start_times = {};
+
     function decompress(url, uint8) {
         print("decompress '"+url+"'...");
-        var start = new Date();
+
+        start_times[url] = new Date();
 
         my_lzma.decompress(uint8,
             on_finish=function(result) {
-                var duration = new Date() - start;
+                var duration = new Date() - start_times[url];
                 print("\nFile '"+url+"' decompressed in " + human_time(duration));
                 print("First decompressed output:");
                 print(result.slice(0,80)+"...");
