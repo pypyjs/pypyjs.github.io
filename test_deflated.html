@@ -1,0 +1,78 @@
+<html>
+<head>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta charset="utf-8">
+    <title>zlib deflated test</title>
+    <style>
+        pre {
+        border: 5px solid #ddd;
+        width: 90%;
+        height: 85%;
+        margin: 1em;
+        padding: 1em;
+        }
+    </style>
+</head>
+
+<body>
+<button id="go">Load</button>
+<pre id="output"></pre>
+<a href="https://github.com/imaya/zlib.js">https://github.com/imaya/zlib.js</a>
+<script src="js/zlib/inflate.min.js" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');"></script>
+<script src="js/utils.js" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');" ></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');"></script>
+<script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');"></script>
+<script>
+$(document).ready(function() {
+    var out = $("#output");
+    function print(data) {
+        out.append(data+"\n");
+    }
+    
+    // https://github.com/henrya/js-jquery/tree/master/BinaryTransport
+    // stored in "js/utils.js"
+    binarytransport()
+
+    function get_deflate_file(url) {
+        print("request file '"+url+"'");
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "binary",
+            responseType: "arraybuffer",
+            processData: false,
+            success: function(result) {
+                print("\nRequest done, result type: " + Object.prototype.toString.call(result));
+
+                print("convert to Uint8Array");
+                var uint8 = new Uint8Array(result);
+                print( "OK, uint8 length: " + uint8.length + " Bytes");
+
+
+                print("decompress...");
+                start_time = new Date();
+                var inflate = new Zlib.Inflate(uint8); // compressed = Array.<number> or Uint8Array
+                var decompressed = inflate.decompress();
+                var duration = new Date() - start_time;
+                print("done in "+human_time(duration)+" to: "+decompressed.length+" Bytes.");
+                print("First decompressed output:");
+
+                var myString="";
+                for (var i=0; i<80; i++) {
+                    myString += String.fromCharCode(decompressed[i])
+                }
+                print(JSON.stringify(myString)+"...");
+            }
+        });
+    }
+
+    $("#go").on( "click", function() {
+        get_deflate_file("pypy.vm.js_level9.deflate");
+        get_deflate_file("pypy.vm.js.mem_level9.deflate");
+    });
+
+    print("Please click on 'Load' !");
+});
+</script>
+</body>
+</html>
