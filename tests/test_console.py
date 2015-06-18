@@ -195,7 +195,7 @@ class PyPyJSSeleniumTests(BaseSeleniumTestCase):
             pystone.main(1)
         """)
         console_text = self._get_console_text()
-        self.assertIn("Pystone(1.1) time for 1 passes = 0", console_text)
+        self.assertIn("Pystone(1.1) time for 1 passes = ", console_text)
         self.assertIn("This machine benchmarks at", console_text)
         self.assertIn("pystones/second", console_text)
 
