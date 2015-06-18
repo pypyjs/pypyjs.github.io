@@ -12,6 +12,16 @@ import lzma
 
 
 try:
+    import lzstring
+except ImportError as err:
+    print("Import error: %s" % err)
+    print("\nMaybe lzstring.py not there?!?")
+    print("e.g. just copy from:")
+    print("https://github.com/eduardtomasek/lz-string-python")
+    lzstring=None
+
+
+try:
     import creole
     from creole.shared.markup_table import MarkupTable
 except ImportError as err:
@@ -21,6 +31,7 @@ except ImportError as err:
     print("    pip install python-creole")
     sys.exit(-1)
 
+################################################################################
 
 class Zlib(object):
     def __init__(self, level=9):
@@ -68,6 +79,25 @@ class Lzma(object):
     def filename_suffix(self):
         return "_preset%i.lzma" % self.preset
 
+
+class Lzstring(object):
+    """
+    https://github.com/eduardtomasek/lz-string-python
+    https://github.com/pieroxy/lz-string
+    """
+    def get_info(self):
+        return "lz-string"
+
+    def compress(self, data):
+        data = data.decode("UTF-8")
+        compressed_string = lzstring.LZString().compressToUTF16(data)
+        # print("Size:", len(compressed_string))
+        return compressed_string.encode("UTF-8")
+
+    def filename_suffix(self):
+        return ".lz"
+
+################################################################################
 
 class FileInfo(object):
     def __init__(self, files):
@@ -226,6 +256,20 @@ class Benchmark(object):
 
 
 if __name__ == "__main__":
+    """
+    result of a complete run is here:
+    https://gist.github.com/jedie/d650de636711aa786235
+
+    Levels with good duration/ratio relations are IMHO:
+        pypy.vm.js:
+            zlib level=5
+            bzip2 level=9
+            lzma preset=3
+        pypy.vm.js.mem:
+            zlib level=5
+            bzip2 level=1
+            lzma preset=0
+    """
     test_files = (
         "pypyjs-release/lib/pypy.vm.js",
         "pypyjs-release/lib/pypy.vm.js.mem"
@@ -234,13 +278,23 @@ if __name__ == "__main__":
 
     compressors = []
 
+    # for quick tests run:
     # compressors += [Zlib(level) for level in range(0,2)]
     # compressors += [Bzip2(level) for level in range(1,3)]
     # compressors += [Lzma(preset) for preset in range(0,1)]
 
-    compressors += [Zlib(level) for level in range(0,10)]
-    compressors += [Bzip2(level) for level in range(1,10)]
-    compressors += [Lzma(preset) for preset in range(0,10)]
+    # all levels/presets:
+    # compressors += [Zlib(level) for level in range(0,10)]
+    # compressors += [Bzip2(level) for level in range(1,10)]
+    # compressors += [Lzma(preset) for preset in range(0,10)]
+
+    if lzstring is not None:
+        compressors.append(Lzstring())
+
+    # good "ratio vs. duration" levels/presets:
+    compressors.append(Zlib(level=5))
+    compressors += [Bzip2(level) for level in (1,9)]
+    compressors += [Lzma(preset) for preset in (0,3)]
 
     for test_file in test_files:
         b = Benchmark([test_file], "./", compressors)
