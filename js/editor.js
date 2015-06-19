@@ -1,4 +1,6 @@
 jQuery( document ).ready(function( $ ) {
+    $("#loading").slideDown();
+
     $("#actions").submit(function() {
         // never "submit" the actions-form
         return false;
@@ -29,7 +31,7 @@ jQuery( document ).ready(function( $ ) {
     });
 });
 
-function verbose_exec(code, run_info) {
+function verbose_exec(code, init_run) {
     $("#run_info").text("start vm...");
 
     var init_start = new Date();
@@ -45,32 +47,31 @@ function verbose_exec(code, run_info) {
         $("#run_info").text("PyPy.js init in " + human_time(duration));
 
         clearInterval(pseudo_status);
+        if (init_run) {
+            $(".CodeMirror").slideDown();
+            CodeMirrorEditor.refresh();
+            $("#actions").slideDown("slow");
+            $("#loading").slideUp();
+        }
         jqconsole.Reset();
 
         // console.log("Start code:" + JSON.stringify(code));
         var start_time = new Date();
         vm.exec(code).then(function() {
-            if (run_info) {
+            if (init_run!=true) { // don't overwrite "PyPy.js init in..." info
                 var duration = new Date() - start_time;
                 $("#run_info").text("Run in " + human_time(duration) + " (OK)");
             }
         }, function (err) {
             // err is an instance of PyPyJS.Error
-            if (run_info) {
-                var duration = new Date() - start_time;
-                $("#run_info").text("Run in " + human_time(duration) + " ("+err.name+": "+err.message+"!)");
-            }
+            var duration = new Date() - start_time;
+            $("#run_info").text("Run in " + human_time(duration) + " ("+err.name+": "+err.message+"!)");
             vm.stderr(err.trace); // the human-readable traceback, as a string
         });
-
 
     }, function(err) {
         jqconsole.Write('ERROR: ' + err);
     });
-
-
-
-
 }
 
 $(function () {
@@ -81,7 +82,7 @@ $(function () {
         jqconsole.Reset();
         jqconsole.Write('exec...', 'jqconsole-output');
         var code=CodeMirrorEditor.getValue();
-        verbose_exec(code, run_info=true);
+        verbose_exec(code, init_run=false);
     });
 
     // Display a helpful message and twiddle thumbs as it loads.
@@ -90,10 +91,6 @@ $(function () {
 
     verbose_exec(
         'print "Welcome to PyPy.js!\\n";import sys;print "Python v"+sys.version',
-        run_info=false
+        init_run=true
     );
-
-    $("#loading").slideUp();
-    $("#actions").slideDown("slow");
-
 });
