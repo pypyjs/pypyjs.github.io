@@ -14,6 +14,20 @@ The main PyPy.js repository is here:
 
 All code is available under the MIT License.
 
+unittests
+~~~~~~~~~
+
+If you would like to run the unittests, e.g.::
+
+ ~ $ virtualenv pypyjs_env
+ ~ $ cd pypyjs_env/
+ ~/pypyjs_env $ source bin/activate
+ (pypyjs_env)~/pypyjs_env $ pip install --upgrade pip
+ (pypyjs_env)~/pypyjs_env $ pip install selenium
+ (pypyjs_env)~/pypyjs_env $ pip install -e git+https://github.com/pypyjs/pypyjs.git#egg=pypyjs
+ (pypyjs_env)~/pypyjs_env $ cd src/pypyjs/
+ (pypyjs_env)~/pypyjs_env/src/pypyjs$ ./tests/runtests.py
+
 
 Repository Overview
 ~~~~~~~~~~~~~~~~~~~

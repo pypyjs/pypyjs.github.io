@@ -1,30 +1,19 @@
 #!/usr/bin/env python
 
 """
-    Quick HowTo setup a test environment and run this file:
+    selenium unittests with "console" page
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    ~ $ virtualenv pypyjs_env
-    ~ $ cd pypyjs_env/
-    ~/pypyjs_env $ source bin/activate
-    (pypyjs_env)~/pypyjs_env $ pip install --upgrade pip
-    (pypyjs_env)~/pypyjs_env $ pip install selenium
-    (pypyjs_env)~/pypyjs_env $ pip install -e git+https://github.com/pypyjs/pypyjs.git#egg=pypyjs
-    (pypyjs_env)~/pypyjs_env $ cd src/pypyjs/
-    (pypyjs_env)~/pypyjs_env/src/pypyjs$ ./runtests.py
-
-    TODO:
-     * merge same code parts with 'editor' branch after both branches are merges
+    :copyleft: 2015 by the PyPyJS team, see AUTHORS for more details.
+    :license: The MIT License (MIT), see LICENSE for more details.
 """
 
 from __future__ import absolute_import, print_function
 
-import difflib
-import os
-import posixpath
 import textwrap
-import traceback
 import unittest
 import sys
+import os
 
 try:
     from selenium import webdriver

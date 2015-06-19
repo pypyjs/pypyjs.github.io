@@ -2,7 +2,7 @@
 
 """
     selenium unittests with "editor" page
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     :copyleft: 2015 by the PyPyJS team, see AUTHORS for more details.
     :license: The MIT License (MIT), see LICENSE for more details.
@@ -14,11 +14,19 @@ import os
 import textwrap
 import unittest
 import sys
+import os
 
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
+try:
+    from selenium.common.exceptions import TimeoutException
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support import expected_conditions
+    from selenium.webdriver.support.wait import WebDriverWait
+except ImportError as err:
+    print("\nImport error: %s" % err)
+    print("\nSelenium not installed?!?")
+    print("e.g.:")
+    print("    pip install selenium\n")
+    sys.exit(-1)
 
 if __package__ != "tests":
     # Hack to make it possible to run this file directly
