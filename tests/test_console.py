@@ -26,11 +26,19 @@ import traceback
 import unittest
 import sys
 
-from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
+try:
+    from selenium import webdriver
+    from selenium.common.exceptions import TimeoutException
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support import expected_conditions
+    from selenium.webdriver.support.wait import WebDriverWait
+except ImportError as err:
+    print("\nImport error: %s" % err)
+    print("\nSelenium not installed?!?")
+    print("e.g.:")
+    print("    pip install selenium\n")
+    sys.exit(-1)
+
 
 if __package__ != "tests":
     # Hack to make it possible to run this file directly
