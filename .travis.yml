@@ -12,7 +12,7 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
 
 install:
-  - "pip install selenium"
+  - "pip install nose selenium"
 
 script:
-  - ./tests/runtests.py
+  - nosetests -v

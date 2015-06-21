@@ -23,10 +23,15 @@ If you would like to run the unittests, e.g.::
  ~ $ cd pypyjs_env/
  ~/pypyjs_env $ source bin/activate
  (pypyjs_env)~/pypyjs_env $ pip install --upgrade pip
- (pypyjs_env)~/pypyjs_env $ pip install selenium
+ (pypyjs_env)~/pypyjs_env $ pip install nose selenium
  (pypyjs_env)~/pypyjs_env $ pip install -e git+https://github.com/pypyjs/pypyjs.git#egg=pypyjs
  (pypyjs_env)~/pypyjs_env $ cd src/pypyjs/
- (pypyjs_env)~/pypyjs_env/src/pypyjs$ ./tests/runtests.py
+ (pypyjs_env)~/pypyjs_env/src/pypyjs$ nosetests
+
+To run only a subset of tests, e.g.::
+
+ (pypyjs_env)~/pypyjs_env/src/pypyjs$ nosetests tests.test_editor
+ (pypyjs_env)~/pypyjs_env/src/pypyjs$ nosetests tests.test_console:PyPyJSSeleniumTests.test_standard_out_streams
 
 
 Repository Overview

@@ -28,15 +28,6 @@ except ImportError as err:
     print("    pip install selenium\n")
     sys.exit(-1)
 
-
-if __package__ != "tests":
-    # Hack to make it possible to run this file directly
-    __package__="tests"
-    sys.path.insert(0,
-        os.path.join(os.path.dirname(__file__), "..")
-    )
-    import tests
-
 from .test_utils.test_cases import BaseSeleniumTestCase
 
 
@@ -197,13 +188,3 @@ class PyPyJSSeleniumTests(BaseSeleniumTestCase):
         self.assertIn("pystones/second", console_text)
 
 
-
-if __name__ == "__main__":
-    unittest.main(
-        verbosity=3,
-        # failfast=True,
-
-        # run a specific test, e.g.:
-        # argv=("selenium_tests", "PyPyJSSeleniumLowLevelTests",)
-        # argv=("selenium_tests", "PyPyJSSeleniumTests.test_js_module",)
-    )

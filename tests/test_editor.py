@@ -28,13 +28,6 @@ except ImportError as err:
     print("    pip install selenium\n")
     sys.exit(-1)
 
-if __package__ != "tests":
-    # Hack to make it possible to run this file directly
-    __package__="tests"
-    sys.path.insert(0,
-        os.path.join(os.path.dirname(__file__), "..")
-    )
-    import tests
 
 from .test_utils.test_cases import BaseSeleniumTestCase
 from .test_utils.utils import website_url_path
@@ -549,21 +542,3 @@ class EditorTests(BaseSeleniumTestCase):
         """)
 
 
-if __name__ == "__main__":
-    unittest.main(
-        verbosity=3,
-        # failfast=True,
-
-        # run a specific test, e.g.:
-        # argv=("test_editor", "EditorTests",)
-        argv=("test_editor",
-            "EditorTests.test_get_module_names",
-            "EditorTests.test_compare_module_names",
-            "EditorTests.test_imports1",
-            "EditorTests.test_imports2",
-        )
-        # argv=("test_editor",
-        #     "EditorTests.test_js_alert",
-        #     "EditorTests.test_js_decorator",
-        # )
-    )
