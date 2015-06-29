@@ -237,7 +237,7 @@ class EditorTests(BaseSeleniumTestCase):
         https://github.com/rfk/pypyjs/issues/83
         """
         self.assertEditor("""
-            import cPickle as pickle # remove docstring if https://github.com/rfk/pypyjs/issues/109 is fixed
+            import cPickle as pickle
             d = pickle.dumps({'foo': 'bar'})
             print d
             print pickle.loads(d)
@@ -251,7 +251,7 @@ class EditorTests(BaseSeleniumTestCase):
             {'foo': 'bar'}
         """)
         self.assertEditor("""
-            import pickle # remove docstring if https://github.com/rfk/pypyjs/issues/109 is fixed
+            import pickle
             print pickle.loads(pickle.dumps({'foo': 1}))
         """, """
             {'foo': 1}
@@ -312,7 +312,7 @@ class EditorTests(BaseSeleniumTestCase):
         https://github.com/rfk/pypyjs/issues/4
         """
         self.assertEditor("""
-            import random # remove docstring if https://github.com/rfk/pypyjs/issues/109 is fixed
+            import random
             print random.__file__
         """, """
             /lib/pypyjs/lib_pypy/random.py
@@ -323,7 +323,7 @@ class EditorTests(BaseSeleniumTestCase):
         https://github.com/rfk/pypyjs/issues/5
         """
         self.assertEditor("""
-            import pprint # remove docstring if https://github.com/rfk/pypyjs/issues/109 is fixed
+            import pprint
             pprint.pprint({"foo":range(10), "bar":range(10,20)})
         """, """
             {'bar': [10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
@@ -335,7 +335,7 @@ class EditorTests(BaseSeleniumTestCase):
         https://github.com/rfk/pypyjs/issues/6
         """
         self.assertEditor("""
-            import platform # remove docstring if https://github.com/rfk/pypyjs/issues/109 is fixed
+            import platform
             print platform.__file__
         """, """
             /lib/pypyjs/lib_pypy/platform.py
@@ -502,7 +502,7 @@ class EditorTests(BaseSeleniumTestCase):
     def test_imports1(self):
         code = self._get_import_test_code()
         self._assertModuleImports(code,
-            verbose=False # Will display many errors until #127 is fixed
+            verbose=True
         )
 
     @unittest.expectedFailure # FIXME
@@ -515,7 +515,7 @@ class EditorTests(BaseSeleniumTestCase):
         """
         module_names_vm = self._get_module_names_from_vm()
         code = "\n".join([
-            "# import %s #109" % module_name
+            "# import %s" % module_name
             for module_name in module_names_vm
         ])
 
