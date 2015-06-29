@@ -395,8 +395,8 @@ class EditorTests(BaseSeleniumTestCase):
                 if not "_" in module_names
             ]
 
-            CACHED_MODULE_NAMES = set(module_names)
-        return CACHED_MODULE_NAMES
+            self.CACHED_MODULE_NAMES = set(module_names)
+        return self.CACHED_MODULE_NAMES
 
     @unittest.expectedFailure # FIXME
     def test_get_module_names(self):
