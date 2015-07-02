@@ -29,6 +29,15 @@ jQuery( document ).ready(function( $ ) {
             $(".jqconsole").css("white-space", "");
         }
     });
+    CodeMirrorEditor.on("focus", function() {
+        $("#console").removeClass("high").addClass("low");
+        $(".CodeMirror").removeClass("low").addClass("high");
+    });
+    CodeMirrorEditor.on("blur", function() {
+        $("#console").removeClass("low").addClass("high");
+        $(".CodeMirror").removeClass("high").addClass("low");
+    });
+
 });
 
 function verbose_exec(code, init_run) {
