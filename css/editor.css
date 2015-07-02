@@ -3,11 +3,12 @@
 }
 .CodeMirror {
     border-top: 1px solid black; border-bottom: 1px solid black;
+    height: 55%;
 }
 #console {
     position: absolute;
     width: 90%;
-    height: 400px;
+    height: 25%;
 }
 .float_right {
     float:right;
