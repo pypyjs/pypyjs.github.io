@@ -44,14 +44,14 @@ function verbose_exec(code, init_run) {
     $("#run_info").text("start vm...");
 
     var init_start = new Date();
-    window.vm = new PyPyJS();
+    window.vm = new pypyjs();
 
     // Send all VM output to the console.
     vm.stdout = vm.stderr = function(data) {
         jqconsole.Write(data, 'jqconsole-output');
     }
     var pseudo_status = setInterval(function(){ vm.stdout("."); }, 500);
-    vm.ready.then(function() {
+    vm.ready().then(function() {
         var duration = new Date() - init_start;
         $("#run_info").text("PyPy.js init in " + human_time(duration));
 
@@ -72,7 +72,7 @@ function verbose_exec(code, init_run) {
                 $("#run_info").text("Run in " + human_time(duration) + " (OK)");
             }
         }, function (err) {
-            // err is an instance of PyPyJS.Error
+            // err is an instance of pypyjs.Error
             var duration = new Date() - start_time;
             $("#run_info").text("Run in " + human_time(duration) + " ("+err.name+": "+err.message+"!)");
             vm.stderr(err.trace); // the human-readable traceback, as a string
