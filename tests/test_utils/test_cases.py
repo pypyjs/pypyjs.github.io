@@ -51,7 +51,7 @@ class BaseSeleniumTestCase(unittest.TestCase):
         page_source = driver.page_source
 
         if not page_source.strip():
-            self.out("[page coure is empty!]")
+            self.out("[page source is empty!]")
         else:
             page_source = "\n".join([line for line in page_source.splitlines() if line.rstrip()])
             self.out(page_source)

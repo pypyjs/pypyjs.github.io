@@ -4,7 +4,7 @@
     selenium unittests with "console" page
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    :copyleft: 2015 by the PyPyJS team, see AUTHORS for more details.
+    :copyleft: 2015 by the PyPy.js team, see AUTHORS for more details.
     :license: The MIT License (MIT), see LICENSE for more details.
 """
 
@@ -65,7 +65,7 @@ class PyPyJSSeleniumTests(BaseSeleniumTestCase):
         txt=txt.replace("'", "\\'")
         script = "\\n".join(textwrap.dedent(txt).strip().splitlines())
 
-        # Add a element to DOM tree to trigger the end of vm.eval() call:
+        # Add a element to DOM tree to trigger the end of pypyjs.eval() call:
         self.driver.execute_script(
             "$('body').append( $('<div/>').attr('id','selenium_vm_run') );"
         )
@@ -73,13 +73,13 @@ class PyPyJSSeleniumTests(BaseSeleniumTestCase):
 
         script2 = (
             "function selenium_vm_run_done() {$( '#selenium_vm_run' ).remove();}"
-            "vm.exec('%s').then(selenium_vm_run_done, selenium_vm_run_done);"
+            "pypyjs.exec('%s').then(selenium_vm_run_done, selenium_vm_run_done);"
         ) % script
 
         # self.out('\nExecute script: %s' % script)
         self.driver.execute_script(script2)
 
-        # Wait that vm.eval() is really finished: The added DOM element will be remove
+        # Wait that pypyjs.eval() is really finished: The added DOM element will be remove
         try:
             check = WebDriverWait(self.driver, timeout).until(
                 expected_conditions.staleness_of(run_element)

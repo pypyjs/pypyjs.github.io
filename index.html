@@ -62,29 +62,28 @@
 
   <script src="pypyjs-release/lib/Promise.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="pypyjs-release/lib/FunctionPromise.js" type="text/javascript" charset="utf-8"></script>
-  <script src="pypyjs-release/lib/pypy.js" type="text/javascript" charset="utf-8"></script>
+  <script src="pypyjs-release/lib/pypyjs.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/jquery-migrate-1.2.1.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/jqconsole.min.js" type="text/javascript" charset="utf-8"></script>
   <script>
     $(function () {
-      // Global vars, for easy debugging in console.
+      // Global var, for easy debugging in console.
       window.jqconsole = $('#console').jqconsole('', '>>> ');
-      window.vm = new PyPyJS();
       // Send all VM output to the console.
-      vm.stdout = vm.stderr = function(data) {
+      pypyjs.stdout = pypyjs.stderr = function(data) {
         jqconsole.Write(data, 'jqconsole-output');
       }
       // Display a helpful message and twiddle thumbs as it loads.
-      vm.stdout("Loading PyPy.js.\n\n");
-      vm.stdout('It\'s big, so this might take a while...');
-      var pseudo_status = setInterval(function(){ vm.stdout("."); }, 500);
-      vm.ready.then(function() {
+      pypyjs.stdout("Loading PyPy.js.\n\n");
+      pypyjs.stdout('It\'s big, so this might take a while...');
+      var pseudo_status = setInterval(function(){ pypyjs.stdout("."); }, 500);
+      pypyjs.ready().then(function() {
         clearInterval(pseudo_status);
         jqconsole.Reset();
-        vm.stdout('Welcome to PyPy.js!\n')
+        pypyjs.stdout('Welcome to PyPy.js!\n')
         // REPL forever via jqconsole prompt.
-        return vm.repl(function(ps1) {
+        return pypyjs.repl(function(ps1) {
           jqconsole.SetPromptLabel(ps1);
           return new Promise(function(resolve, reject) {
             jqconsole.Prompt(true, function (input) {

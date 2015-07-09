@@ -4,7 +4,7 @@
     selenium unittests with "editor" page
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    :copyleft: 2015 by the PyPyJS team, see AUTHORS for more details.
+    :copyleft: 2015 by the PyPy.js team, see AUTHORS for more details.
     :license: The MIT License (MIT), see LICENSE for more details.
 """
 
@@ -35,7 +35,7 @@ from .test_utils.utils import website_url_path
 
 class EditorTests(BaseSeleniumTestCase):
     """
-    Request and init PyPyJS in setUpClass
+    Request and init PyPy.js in setUpClass
     and no complete reload before every tests
     """
 
@@ -196,8 +196,8 @@ class EditorTests(BaseSeleniumTestCase):
             import sys
             print sys.version
         """, """
-            2.7.8 (?, May 22 2015, 10:47:53)
-            [PyPy 2.5.0]
+            2.7.9 (?, Jul 03 2015, 17:08:29)
+            [PyPy 2.6.0]
         """)
 
         self.assertEditor("""
@@ -511,7 +511,7 @@ class EditorTests(BaseSeleniumTestCase):
         work-a-round for: https://github.com/pypyjs/pypyjs/issues/127
 
         Add 'import' as DocString, so that
-        PyPyJS.prototype.findImportedNames will work.
+        pypyjs.prototype.findImportedNames will work.
         """
         module_names_vm = self._get_module_names_from_vm()
         code = "\n".join([
@@ -532,7 +532,7 @@ class EditorTests(BaseSeleniumTestCase):
             globals: {'__name__': '__main__', '__builtins__': <module '__builtin__' (built-in)>, '__package__': None, 'sys': <module 'sys' (built-in)>}
         """)
 
-        # We get a fresh PyPyJS(), so sys is not imported anymore:
+        # We get a fresh pypyjs(), so sys is not imported anymore:
         self.assertEditor("""
             print "locals:", locals()
             print "globals:", globals()
