@@ -2,6 +2,8 @@
 PyPy.js website
 ===============
 
+**Note:** Development is sleeping at the moment. Discuss this here: https://github.com/pypyjs/pypyjs/issues/213
+
 pypyjs.github.io is the source for the http://pypyjs.org website, which is hosted via github pages.
 
 .. image:: https://travis-ci.org/pypyjs/pypyjs.github.io.svg?branch=master
